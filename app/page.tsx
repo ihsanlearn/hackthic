@@ -1,65 +1,176 @@
-import Image from "next/image";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Activity, Target, Shield, Bug, Search, FileText, Bot, Hammer } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import Link from "next/link"
 
-export default function Home() {
+export default function Dashboard() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+           <h1 className="text-3xl font-bold tracking-tight">Command Center</h1>
+           <p className="text-muted-foreground">Operational overview and quick actions.</p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      </div>
+      
+      {/* Stats Row */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Active Targets</CardTitle>
+            <Target className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">12</div>
+            <p className="text-xs text-muted-foreground">+2 from last week</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Vulns Found</CardTitle>
+            <Bug className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">4</div>
+            <p className="text-xs text-muted-foreground">+1 pending triage</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Workflows</CardTitle>
+            <Activity className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">8</div>
+            <p className="text-xs text-muted-foreground">Recent: Subdomain Enum</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Security Score</CardTitle>
+            <Shield className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">85%</div>
+            <p className="text-xs text-muted-foreground">Workflow efficiency</p>
+          </CardContent>
+        </Card>
+      </div>
+
+       {/* Quick Actions Row */}
+       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <Link href="/recon" className="w-full">
+            <Button variant="outline" className="w-full h-24 flex flex-col gap-2 hover:bg-primary/5 hover:border-primary/50 transition-all">
+                <Search className="h-6 w-6 text-primary" />
+                <span className="font-semibold">Start Recon</span>
+            </Button>
+          </Link>
+          <Link href="/notes" className="w-full">
+            <Button variant="outline" className="w-full h-24 flex flex-col gap-2 hover:bg-primary/5 hover:border-primary/50 transition-all">
+                <FileText className="h-6 w-6 text-primary" />
+                <span className="font-semibold">Open Notes</span>
+            </Button>
+          </Link>
+          <Link href="/payloads" className="w-full">
+            <Button variant="outline" className="w-full h-24 flex flex-col gap-2 hover:bg-primary/5 hover:border-primary/50 transition-all">
+                <Bot className="h-6 w-6 text-primary" />
+                <span className="font-semibold">Payload Library</span>
+            </Button>
+          </Link>
+          <Link href="/reporting" className="w-full">
+            <Button variant="outline" className="w-full h-24 flex flex-col gap-2 hover:bg-primary/5 hover:border-primary/50 transition-all">
+                <FileText className="h-6 w-6 text-primary" />
+                <span className="font-semibold">Templates</span>
+            </Button>
+          </Link>
+       </div>
+
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+        <Card className="col-span-4">
+          <CardHeader>
+            <CardTitle>Recent Activity</CardTitle>
+            <CardDescription>
+              Your bug hunting activities over the last 24 hours.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+               {/* Activity Feed */}
+               <div className="flex items-center">
+                  <span className="relative flex h-2 w-2 mr-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-sky-500"></span>
+                  </span>
+                  <div className="ml-4 space-y-1">
+                    <p className="text-sm font-medium leading-none">Starting Nmap scan on target-alpha</p>
+                    <p className="text-sm text-muted-foreground">2 minutes ago</p>
+                  </div>
+               </div>
+               <div className="flex items-center">
+                   <div className="ml-4 space-y-1">
+                    <p className="text-sm font-medium leading-none">Found exposed .git directory</p>
+                    <p className="text-sm text-muted-foreground">1 hour ago</p>
+                  </div>
+               </div>
+               <div className="flex items-center">
+                   <div className="ml-4 space-y-1">
+                    <p className="text-sm font-medium leading-none">Completed recon workflow #23</p>
+                    <p className="text-sm text-muted-foreground">3 hours ago</p>
+                  </div>
+               </div>
+                <div className="flex items-center">
+                   <div className="ml-4 space-y-1">
+                    <p className="text-sm font-medium leading-none">Updated "XSS on Login" note</p>
+                    <p className="text-sm text-muted-foreground">5 hours ago</p>
+                  </div>
+               </div>
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card className="col-span-3">
+          <CardHeader>
+            <CardTitle>Pinned Tools</CardTitle>
+            <CardDescription>
+              Quick access to favorite tools
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between p-2 border rounded-md hover:bg-muted cursor-pointer transition-colors">
+                <div className="flex items-center gap-3">
+                    <Hammer className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm font-medium">Burp Suite Pro</span>
+                </div>
+                <div className="flex items-center gap-2">
+                    <span className="text-green-500 text-xs">●</span>
+                </div>
+              </div>
+              <div className="flex items-center justify-between p-2 border rounded-md hover:bg-muted cursor-pointer transition-colors">
+                <div className="flex items-center gap-3">
+                    <Search className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm font-medium">Recon-ng</span>
+                </div>
+                 <div className="flex items-center gap-2">
+                    <span className="text-yellow-500 text-xs">●</span>
+                </div>
+              </div>
+              <div className="flex items-center justify-between p-2 border rounded-md hover:bg-muted cursor-pointer transition-colors">
+                <div className="flex items-center gap-3">
+                    <Bot className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm font-medium">Nuclei</span>
+                </div>
+                 <div className="flex items-center gap-2">
+                    <span className="text-green-500 text-xs">●</span>
+                </div>
+              </div>
+            </div>
+             <Button variant="ghost" size="sm" className="w-full mt-4 text-muted-foreground" asChild>
+                <Link href="/tools">View All Tools</Link>
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
     </div>
-  );
+  )
 }
