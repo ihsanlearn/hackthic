@@ -1,10 +1,6 @@
-# Hackthic — Security Operations Dashboard
+# Hackthic — Security Toolkits
 
-![Hackthic](https://img.shields.io/badge/Hackthic-v2.4.0-39ff14?style=for-the-badge)
-![Security](https://img.shields.io/badge/Security-Red_Team_&_Bug_Bounty-red?style=for-the-badge)
-![Private](https://img.shields.io/badge/Visibility-Private_Operative-blue?style=for-the-badge)
-
-**Hackthic** is a centralized Security Operations Center (SOC) dashboard designed for streamlined reconnaissance, vulnerability assessment, and offensive security operations. It integrates essential workflows, tool management, and payload distribution into a unified, high-performance interface.
+**Hackthic** is a centralized Security Toolkits designed for streamlined reconnaissance, vulnerability assessment, and offensive security operations. It integrates essential workflows, tool management, and payload distribution into a unified, high-performance interface.
 
 ![Tech Stack](https://img.shields.io/badge/Next.js_16-Black?style=flat-square&logo=next.js&logoColor=white)
 ![Tech Stack](https://img.shields.io/badge/React_19-20232a?style=flat-square&logo=react&logoColor=61dafb)
@@ -13,23 +9,21 @@
 
 ---
 
-## ⚠️ Legal & Ethical Notice
+## Legal & Ethical Notice
 
-> [!IMPORTANT] > **STRICT COMPLIANCE REQUIRED**
-
-All tools, payloads, and methodologies provided in this repository are strictly for **ETHICAL & LEGAL USE ONLY**.
-
-- **Authorized Use Only**: You must only perform security testing on your own systems or systems where you have obtained **explicit written permission** from the owner.
-- **Legal Liability**: Any unauthorized access, exploitation, or interruption of electronic systems is **ILLEGAL** and punishable under **Indonesian Law**, specifically:
-  - **UU ITE** (Undang-Undang Informasi dan Transaksi Elektronik)
-  - **KUHP** (Kitab Undang-Undang Hukum Pidana)
-- **Disclaimer**: The developers and contributors assume **NO RESPONSIBILITY** for any misuse of these tools. All actions taken by the user are their own sole responsibility.
+> [!IMPORTANT]
+> All tools, payloads, and methodologies provided in this repository are strictly for **ETHICAL & LEGAL USE ONLY**.
+> - **Authorized Use Only**: You must only perform security testing on your own systems or systems where you have obtained **explicit written permission** from the owner.
+> - **Legal Liability**: Any unauthorized access, exploitation, or interruption of electronic systems is **ILLEGAL** and punishable under **Indonesian Law**, specifically:
+>  - **UU ITE** (Undang-Undang Informasi dan Transaksi Elektronik)
+>  - **KUHP** (Kitab Undang-Undang Hukum Pidana)
+> - **Disclaimer**: The developers and contributors assume **NO RESPONSIBILITY** for any misuse of these tools. All actions taken by the user are their own sole responsibility.
 
 ---
 
-## 🔥 Key Features
+## Key Features
 
-### 🔍 Reconnaissance Workflow
+### Reconnaissance Workflow
 
 A structured methodology guiding operatives from initial subdomain enumeration to content discovery.
 
@@ -37,28 +31,28 @@ A structured methodology guiding operatives from initial subdomain enumeration t
 - **Port Scanning & Probing**: Command generators for `naabu` and `httpx`.
 - **Content Discovery**: Strategies using `katana`, `gau`, and `waybackurls`.
 
-### 🎯 Global Search & Command Palette
+### Global Search & Command Palette
 
 A Spotlight-style command center (`Cmd+K`) to instantly navigate the entire ecosystem.
 
 - **Unified Index**: Search across Tools, Payloads, Dorks, and Pages simultaneously.
 - **Categorized Results**: Clear distinction between navigation, tool definitions, and payload libraries.
 
-### 🛠️ Tools Center
+### Tools Center
 
 A curated arsenal of security tools organized by phase.
 
 - **Categories**: Proxy, Recon, Scanning, Fuzzing, Exploitation, OSINT.
 - **Tool Cards**: Detailed usage instructions, categories, and quick-access documentation for tools like `Burp Suite`, `Fuzzuli`, `Dalfox`, etc.
 
-### 💣 Payload Library
+### Payload Library
 
 An extensive repository of attack vectors for various vulnerabilities.
 
 - **Vulnerability Classes**: XSS, SQL Injection, LFI, SSRF, Command Injection.
 - **Quick Copy**: One-click copying for rapid deployment during engagements.
 
-### 🔎 Advanced Dorking
+### Advanced Dorking
 
 Multi-engine dorking automation for targeted intelligence gathering.
 
@@ -66,7 +60,7 @@ Multi-engine dorking automation for targeted intelligence gathering.
 - **Visit Tracking**: Tracks utilized dorks during a session to prevent redundancy.
 - **Categories**: Bug Bounty specific files, sensitive exposures, broad reconnaissance.
 
-### 📝 Reporting Module
+### Reporting Module
 
 Markdown-based reporting engine for documenting findings.
 
@@ -75,7 +69,7 @@ Markdown-based reporting engine for documenting findings.
 
 ---
 
-## 🤝 Protocol
+## Protocol
 
 This project maintains a strict protocol for contributions and usage.
 
