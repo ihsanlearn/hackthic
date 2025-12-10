@@ -90,7 +90,7 @@ export function GlobalSearch() {
       <CommandDialog 
         open={open} 
         onOpenChange={setOpen}
-        className="bg-popover text-popover-foreground border rounded-lg border-border/50 **:[[cmdk-input-wrapper]]:border-b-border/40"
+        className="bg-popover text-popover-foreground border rounded-[0.5rem] border-border/50 **:[[cmdk-input-wrapper]]:border-b-border/40"
       >
         <CommandInput placeholder="Type a command or search..." />
         <CommandList>
