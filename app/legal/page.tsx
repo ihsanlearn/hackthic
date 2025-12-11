@@ -37,18 +37,18 @@ export default function LegalPage() {
                             <br />
                             This includes, but is not limited to, laws such as:
                             <ul className="list-disc pl-6 mt-1">
-                            <li>Computer Fraud & Abuse Act (CFAA) – United States</li>
-                            <li>Computer Misuse Act – United Kingdom</li>
-                            <li>Cybercrime Act – Australia</li>
-                            <li>General Data Protection Regulation (GDPR) – Europe</li>
-                            <li>Singapore Computer Misuse and Cybersecurity Act (CMCA)</li>
-                            <li>Your country’s relevant cybercrime & electronic transaction laws</li>
+                                <li>Computer Fraud & Abuse Act (CFAA) – United States</li>
+                                <li>Computer Misuse Act – United Kingdom</li>
+                                <li>Cybercrime Act – Australia</li>
+                                <li>General Data Protection Regulation (GDPR) – Europe</li>
+                                <li>Singapore Computer Misuse and Cybersecurity Act (CMCA)</li>
+                                <li>Your country’s relevant cybercrime & electronic transaction laws</li>
                             </ul>
                             <br />
                             <strong>Especially in Indonesia</strong>, unauthorized cyber activities are punishable under:
                             <ul className="list-disc pl-6 mt-1">
-                            <li><strong>UU ITE (Undang-Undang Informasi dan Transaksi Elektronik)</strong></li>
-                            <li><strong>KUHP (Kitab Undang-Undang Hukum Pidana)</strong></li>
+                                <li><strong>UU ITE (Undang-Undang Informasi dan Transaksi Elektronik)</strong></li>
+                                <li><strong>KUHP (Kitab Undang-Undang Hukum Pidana)</strong></li>
                             </ul>
                         </p>
                     </div>

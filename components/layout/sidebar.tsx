@@ -189,7 +189,8 @@ export function Sidebar({ className }: SidebarProps) {
           <div className="border-t border-border/40 p-4">
              <div className="text-xs text-muted-foreground font-mono">
                 STATUS: <span className="text-green-500">ONLINE</span><br/>
-                SYS.VER: 2.4.0
+                SYS.VER: 2.4.0 <br />
+                &copy; {new Date().getFullYear()} Hackthic. License under CC BY 4.0.
              </div>
           </div>
         </div>

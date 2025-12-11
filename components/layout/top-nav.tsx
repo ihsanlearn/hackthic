@@ -34,7 +34,7 @@ export function TopNav() {
         <span className="sr-only">Toggle theme</span>
       </Button>
       
-      <DropdownMenu>
+      {/* <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="secondary" size="icon" className="rounded-full">
             <Avatar className="h-8 w-8">
@@ -49,7 +49,7 @@ export function TopNav() {
           <DropdownMenuItem>Settings</DropdownMenuItem>
           <DropdownMenuItem>Logout</DropdownMenuItem>
         </DropdownMenuContent>
-      </DropdownMenu>
+      </DropdownMenu> */}
     </header>
   )
 }
