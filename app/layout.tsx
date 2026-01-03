@@ -70,6 +70,15 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://hackthic.iihn.fun",
   },
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Hunt.Hub",
+  },
+  formatDetection: {
+    telephone: false,
+  },
 };
 
 export default function RootLayout({

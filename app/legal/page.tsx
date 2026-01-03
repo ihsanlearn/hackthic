@@ -30,7 +30,7 @@ export default function LegalPage() {
                         <p>
                             You must only perform security testing on your own systems or systems where you have obtained <strong className="text-foreground">explicit written permission</strong> from the owner.
                         </p>
-                        <p className="border-l-2 border-red-500/50 pl-4 py-1 italic text-foreground/80">
+                        <div className="border-l-2 border-red-500/50 pl-4 py-1 italic text-foreground/80">
                             Any form of unauthorized access, intrusion, scanning, exploitation, or interruption of electronic 
                             systems is <strong>ILLEGAL in all countries</strong> and may result in severe criminal penalties.
                             <br />
@@ -50,7 +50,7 @@ export default function LegalPage() {
                                 <li><strong>UU ITE (Undang-Undang Informasi dan Transaksi Elektronik)</strong></li>
                                 <li><strong>KUHP (Kitab Undang-Undang Hukum Pidana)</strong></li>
                             </ul>
-                        </p>
+                        </div>
                     </div>
                 </div>
 
