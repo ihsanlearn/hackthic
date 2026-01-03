@@ -36,27 +36,73 @@ export function PayloadLibrary() {
             </TabsTrigger>
             ))}
         </TabsList>
-        {payloadCategories.map((cat) => (
-            <TabsContent key={cat.id} value={cat.id} className="space-y-4 mt-6">
-            <div className="grid gap-4 md:grid-cols-2">
-                {cat.payloads
-                .filter(p => !search || p.name.toLowerCase().includes(search.toLowerCase()) || p.code.includes(search))
-                .map((payload, idx) => (
-                <Card key={idx}>
-                    <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium">{payload.name}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                    <CodeBlock code={payload.code} />
-                    </CardContent>
-                </Card>
-                ))}
-            </div>
-                {cat.payloads.filter(p => !search || p.name.toLowerCase().includes(search.toLowerCase()) || p.code.includes(search)).length === 0 && (
-                <div className="text-center text-muted-foreground py-10">No payloads found matching your search.</div>
+        {payloadCategories.map((cat) => {
+            // @ts-ignore - sections is properly checked
+            const sections = cat.sections;
+
+            return (
+                <TabsContent key={cat.id} value={cat.id} className="space-y-4 mt-6">
+                {sections ? (
+                    <div className="space-y-8">
+                        {sections.map((section: any, idx: number) => {
+                            const filteredPayloads = section.payloads.filter((p: any) => 
+                                !search || p.name.toLowerCase().includes(search.toLowerCase()) || p.code.includes(search)
+                            );
+
+                            if (filteredPayloads.length === 0) return null;
+
+                            return (
+                                <div key={idx} className="space-y-4">
+                                    <h3 className="text-lg font-semibold tracking-tight text-primary/80 border-b border-white/5 pb-2">
+                                        {section.title}
+                                    </h3>
+                                    <div className="grid gap-4 md:grid-cols-2">
+                                        {filteredPayloads.map((payload: any, pIdx: number) => (
+                                            <Card key={pIdx}>
+                                                <CardHeader className="pb-2">
+                                                    <CardTitle className="text-sm font-medium">{payload.name}</CardTitle>
+                                                </CardHeader>
+                                                <CardContent>
+                                                    <CodeBlock code={payload.code} />
+                                                </CardContent>
+                                            </Card>
+                                        ))}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                        {sections.every((s: any) => 
+                            s.payloads.filter((p: any) => 
+                                !search || p.name.toLowerCase().includes(search.toLowerCase()) || p.code.includes(search)
+                            ).length === 0
+                        ) && (
+                            <div className="text-center text-muted-foreground py-10">No payloads found matching your search.</div>
+                        )}
+                    </div>
+                ) : (
+                    <>
+                        <div className="grid gap-4 md:grid-cols-2">
+                            {cat.payloads
+                            .filter(p => !search || p.name.toLowerCase().includes(search.toLowerCase()) || p.code.includes(search))
+                            .map((payload, idx) => (
+                            <Card key={idx}>
+                                <CardHeader className="pb-2">
+                                <CardTitle className="text-sm font-medium">{payload.name}</CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                <CodeBlock code={payload.code} />
+                                </CardContent>
+                            </Card>
+                            ))}
+                        </div>
+                        {cat.payloads.filter(p => !search || p.name.toLowerCase().includes(search.toLowerCase()) || p.code.includes(search)).length === 0 && (
+                        <div className="text-center text-muted-foreground py-10">No payloads found matching your search.</div>
+                        )}
+                    </>
                 )}
-            </TabsContent>
-        ))}
+                </TabsContent>
+            );
+        })}
         </Tabs>
     </div>
   )
