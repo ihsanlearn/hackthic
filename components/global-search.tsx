@@ -37,23 +37,29 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
 import { proxy, recon, scanning, fuzzing, exploitation, osint } from "@/app/tools/components/tools-data"
-import { payloadCategories } from "@/app/payloads/components/payload-data"
 import { getDorkEngines } from "@/app/dorks/actions"
+import { getPayloadCategories } from "@/app/payloads/actions"
 
 export function GlobalSearch() {
   const [open, setOpen] = React.useState(false)
   const [dorkEngines, setDorkEngines] = React.useState<string[]>([])
+  const [payloadCats, setPayloadCats] = React.useState<{ id: string; name: string }[]>([])
   const router = useRouter()
 
   React.useEffect(() => {
     // Fetch engines on mount
     getDorkEngines().then(engines => {
         if (engines.length > 0) {
-            setDorkEngines(engines)
+            setDorkEngines(engines.map(e => e.name)) // getDorkEngines returns objects {name, base_url}
         } else {
-            // Fallback if DB fetch fails or is empty (e.g. not logged in)
+            // Fallback
             setDorkEngines(['google', 'github', 'shodan', 'fofa', 'censys', 'hunter']) 
         }
+    })
+
+    // Fetch payload categories
+    getPayloadCategories().then(cats => {
+        setPayloadCats(cats)
     })
 
     const down = (e: KeyboardEvent) => {
@@ -153,7 +159,7 @@ export function GlobalSearch() {
           <CommandSeparator />
 
           <CommandGroup heading="Payload Categories">
-            {payloadCategories.map((cat) => (
+            {payloadCats.map((cat) => (
                 <CommandItem key={cat.id} onSelect={() => runCommand(() => router.push("/payloads"))} value={cat.name}>
                     <Bomb className="mr-2 h-4 w-4" />
                     <span>{cat.name} Payloads</span>

@@ -12,6 +12,7 @@ import {
   Scan, 
   Bug, 
   Hammer, 
+  Target,
   StickyNote, 
   Bomb, 
   Bot, 
@@ -37,6 +38,12 @@ export function Sidebar({ className }: SidebarProps) {
       icon: LayoutDashboard,
       active: pathname === "/",
       experimental: true,
+    },
+    {
+      name: "Target Scope",
+      href: "/targets",
+      icon: Target,
+      active: pathname?.startsWith("/targets"),
     },
     {
       name: "Recon Workflow",

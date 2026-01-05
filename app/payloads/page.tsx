@@ -1,8 +1,9 @@
-"use client"
-
 import { PayloadLibrary } from "./components/PayloadLibrary"
+import { getPayloads } from "./actions"
 
-export default function PayloadsPage() {
+export default async function PayloadsPage() {
+  const payloads = await getPayloads()
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-2">
@@ -10,7 +11,7 @@ export default function PayloadsPage() {
         <p className="text-muted-foreground">Comprehensive collection of attack payloads and polyglots.</p>
       </div>
 
-      <PayloadLibrary />
+      <PayloadLibrary initialData={payloads} />
     </div>
   )
 }

@@ -6,10 +6,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CodeBlock } from "@/components/ui/code-block"
 import { Search } from "lucide-react"
-import { payloadCategories } from "./payload-data"
+import { PayloadCategory } from "../actions"
 
-export function PayloadLibrary() {
+interface PayloadLibraryProps {
+    initialData: PayloadCategory[]
+}
+
+export function PayloadLibrary({ initialData }: PayloadLibraryProps) {
   const [search, setSearch] = useState("")
+  const payloadCategories = initialData
 
   return (
     <div className="space-y-6">
@@ -83,7 +88,7 @@ export function PayloadLibrary() {
                     <>
                         <div className="grid gap-4 md:grid-cols-2">
                             {cat.payloads
-                            .filter(p => !search || p.name.toLowerCase().includes(search.toLowerCase()) || p.code.includes(search))
+                            ?.filter(p => !search || p.name.toLowerCase().includes(search.toLowerCase()) || p.code.includes(search))
                             .map((payload, idx) => (
                             <Card key={idx}>
                                 <CardHeader className="pb-2">
@@ -95,7 +100,7 @@ export function PayloadLibrary() {
                             </Card>
                             ))}
                         </div>
-                        {cat.payloads.filter(p => !search || p.name.toLowerCase().includes(search.toLowerCase()) || p.code.includes(search)).length === 0 && (
+                        {cat.payloads?.filter(p => !search || p.name.toLowerCase().includes(search.toLowerCase()) || p.code.includes(search)).length === 0 && (
                         <div className="text-center text-muted-foreground py-10">No payloads found matching your search.</div>
                         )}
                     </>

@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { AppShell } from "@/components/layout/app-shell";
 import { VisitedProvider } from "./visited-context";
+import { TargetProvider } from "@/components/providers/target-provider";
 import { JsonLd } from "@/components/json-ld";
 
 const jetbrainsMono = JetBrains_Mono({ 
@@ -93,7 +94,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <VisitedProvider>
-            <AppShell>{children}</AppShell>
+             <TargetProvider>
+                <AppShell>{children}</AppShell>
+             </TargetProvider>
           </VisitedProvider>
         </ThemeProvider>
       </body>
