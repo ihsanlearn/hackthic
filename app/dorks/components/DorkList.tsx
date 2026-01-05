@@ -4,26 +4,26 @@ import { useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { dorksData, DorkEngine } from "./dorks-data"
+import { DorkEngine, DorkCategory, DorkEngineConfig } from "../types"
 import { DorkCard } from "./DorkCard"
-import { Search, Globe, Github, Server, Database, Radar, ScanSearch } from "lucide-react"
+import { Search } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
-export function DorkList() {
+interface DorkListProps {
+  data: Record<DorkEngine, DorkCategory[]>
+  engines: DorkEngineConfig[]
+}
+
+export function DorkList({ data, engines }: DorkListProps) {
   const [target, setTarget] = useState("")
   const [search, setSearch] = useState("")
   const [engine, setEngine] = useState<DorkEngine>("google")
 
-  const currentCategories = dorksData[engine] || []
+  console.log(data)
+  console.log(engine)
 
-  const engineIcons: Record<DorkEngine, React.ReactNode> = {
-      google: <Globe className="h-4 w-4 mr-2" />,
-      github: <Github className="h-4 w-4 mr-2" />,
-      shodan: <Server className="h-4 w-4 mr-2" />,
-      fofa: <Database className="h-4 w-4 mr-2" />,
-      censys: <ScanSearch className="h-4 w-4 mr-2" />,
-      hunter: <Radar className="h-4 w-4 mr-2" />
-  }
+  const currentCategories = data[engine] || []
+  const currentEngineUrl = engines.find(e => e.name.toLowerCase() === engine)?.base_url
 
   return (
     <div className="space-y-6">
@@ -33,16 +33,29 @@ export function DorkList() {
                  <div className="space-y-2">
                     <Label htmlFor="engine">Search Engine</Label>
                     <Select value={engine} onValueChange={(val) => setEngine(val as DorkEngine)}>
-                        <SelectTrigger id="engine">
+                        <SelectTrigger id="engine" className="capitalize">
                             <SelectValue placeholder="Select Engine" />
                         </SelectTrigger>
+
                         <SelectContent>
-                            <SelectItem value="google">Google</SelectItem>
-                            <SelectItem value="github">GitHub</SelectItem>
-                            <SelectItem value="shodan">Shodan</SelectItem>
-                            <SelectItem value="fofa">Fofa</SelectItem>
-                            <SelectItem value="censys">Censys</SelectItem>
-                            <SelectItem value="hunter">Hunter.how</SelectItem>
+                            {engines.length > 0 ? (
+                                engines.map((eng) => (
+                                    data[eng.name.toLowerCase() as DorkEngine] != null && (
+                                        <SelectItem className="capitalize" key={eng.name} value={eng.name.toLowerCase()}>
+                                            {eng.name}
+                                        </SelectItem>
+                                    )
+                                ))
+                            ) : (
+                                <>
+                                    <SelectItem value="google">Google</SelectItem>
+                                    <SelectItem value="github">GitHub</SelectItem>
+                                    <SelectItem value="shodan">Shodan</SelectItem>
+                                    <SelectItem value="fofa">Fofa</SelectItem>
+                                    <SelectItem value="censys">Censys</SelectItem>
+                                    <SelectItem value="hunter">Hunter.how</SelectItem>
+                                </>
+                            )}
                         </SelectContent>
                     </Select>
                  </div>
@@ -105,7 +118,7 @@ export function DorkList() {
                             <TabsContent key={value} value={value} className="m-0">
                                 <div className="grid gap-4 md:grid-cols-2">
                                     {filteredItems.map((item, idx) => (
-                                        <DorkCard key={idx} item={item} targetDomain={target} engine={engine} />
+                                        <DorkCard key={idx} item={item} targetDomain={target} engine={engine} engineUrl={currentEngineUrl} />
                                     ))}
                                     {filteredItems.length === 0 && (
                                         <div className="col-span-full text-center text-muted-foreground py-10">

@@ -1,21 +1,15 @@
 "use client"
 
 import * as React from "react"
-import { Moon, Sun, User, Search } from "lucide-react"
+import { Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
 
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { GlobalSearch } from "../global-search"
+import { UserNav } from "../auth/user-nav"
+import type { User } from "@supabase/supabase-js"
 
-export function TopNav() {
+export function TopNav({ user }: { user: User | null }) {
   const { setTheme, resolvedTheme } = useTheme()
 
   return (
@@ -34,22 +28,7 @@ export function TopNav() {
         <span className="sr-only">Toggle theme</span>
       </Button>
       
-      {/* <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="secondary" size="icon" className="rounded-full">
-            <Avatar className="h-8 w-8">
-              <AvatarImage src="/placeholder-user.jpg" alt="@user" />
-              <AvatarFallback>U</AvatarFallback>
-            </Avatar>
-            <span className="sr-only">Toggle user menu</span>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem>Profile</DropdownMenuItem>
-          <DropdownMenuItem>Settings</DropdownMenuItem>
-          <DropdownMenuItem>Logout</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu> */}
+      <UserNav user={user} />
     </header>
   )
 }

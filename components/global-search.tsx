@@ -38,13 +38,24 @@ import { cn } from "@/lib/utils"
 
 import { proxy, recon, scanning, fuzzing, exploitation, osint } from "@/app/tools/components/tools-data"
 import { payloadCategories } from "@/app/payloads/components/payload-data"
-import { dorksData } from "@/app/dorks/components/dorks-data"
+import { getDorkEngines } from "@/app/dorks/actions"
 
 export function GlobalSearch() {
   const [open, setOpen] = React.useState(false)
+  const [dorkEngines, setDorkEngines] = React.useState<string[]>([])
   const router = useRouter()
 
   React.useEffect(() => {
+    // Fetch engines on mount
+    getDorkEngines().then(engines => {
+        if (engines.length > 0) {
+            setDorkEngines(engines)
+        } else {
+            // Fallback if DB fetch fails or is empty (e.g. not logged in)
+            setDorkEngines(['google', 'github', 'shodan', 'fofa', 'censys', 'hunter']) 
+        }
+    })
+
     const down = (e: KeyboardEvent) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault()
@@ -68,8 +79,6 @@ export function GlobalSearch() {
       ...exploitation.map(t => ({ ...t, category: 'Exploitation' })), 
       ...osint.map(t => ({ ...t, category: 'OSINT' }))
   ]
-
-  const dorkEngines = Object.keys(dorksData)
 
   return (
     <>

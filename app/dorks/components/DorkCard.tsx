@@ -1,27 +1,19 @@
 "use client"
 
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Copy, Search } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { CodeBlock } from "@/components/ui/code-block"
-import { useState } from "react"
-import { DorkEngine } from "./dorks-data"
-
-interface DorkItem {
-    name: string
-    query: string
-}
+import { DorkEngine, DorkItem } from "../types"
 
 interface DorkCardProps {
     item: DorkItem
     targetDomain?: string
     engine: DorkEngine
+    engineUrl?: string
 }
 
 import { useVisited } from "../../visited-context"
 
-export function DorkCard({ item, targetDomain, engine }: DorkCardProps) {
-    const [copied, setCopied] = useState(false)
+export function DorkCard({ item, targetDomain, engine, engineUrl }: DorkCardProps) {
     const { visited, markVisited } = useVisited()
 
     // Helper to format query with target
@@ -38,9 +30,11 @@ export function DorkCard({ item, targetDomain, engine }: DorkCardProps) {
             case 'fofa':
                 return `domain="${targetDomain}" && ${item.query}`
             case 'censys':
-                return `services.tls.certificates.leaf_data.names: "${targetDomain}" and ${item.query}` // Very specific, maybe just string search
-             case 'hunter':
+                return `services.tls.certificates.leaf_data.names:"${targetDomain}" and ${item.query}` // Very specific, maybe just string search
+            case 'hunter':
                 return `domain="${targetDomain}"&&${item.query}`
+            case 'bing':
+                return `site:${targetDomain} ${item.query}`
             default:
                 return `${item.query} ${targetDomain}`
         }
@@ -54,28 +48,59 @@ export function DorkCard({ item, targetDomain, engine }: DorkCardProps) {
         let url = ""
         const q = encodeURIComponent(dorkQuery)
         const qBase64 = btoa(dorkQuery)
-
-        switch (engine) {
-            case 'google':
-                url = `https://www.google.com/search?q=${q}`
-                break
-            case 'github':
-                url = `https://github.com/search?q=${q}&type=code`
-                break
-            case 'shodan':
-                url = `https://www.shodan.io/search?query=${q}`
-                break
-            case 'fofa':
-                url = `https://fofa.info/result?qbase64=${qBase64}`
-                break
-            case 'censys':
-                url = `https://search.censys.io/search?resource=hosts&q=${q}`
-                break
-             case 'hunter':
-                url = `https://hunter.how/search?q=${qBase64}`
-                break
+        
+        const baseUrl = engineUrl
+        
+        if (baseUrl) {
+             switch (engine) {
+                case 'shodan':
+                    url = `${baseUrl}${q}`
+                    break
+                case 'github':
+                     url = `${baseUrl}${q}&type=code`
+                     break
+                case 'fofa':
+                    // Fofa sometimes uses result?qbase64= or just q=
+                    url = `${baseUrl}${qBase64}`
+                    break
+                case 'hunter':
+                     url = `${baseUrl}${qBase64}`
+                     break
+                case 'censys':
+                     url = `${baseUrl}${q}`
+                     break
+                default:
+                    // Google, Bing, and generic ones usually use 'q'
+                    url = `${baseUrl}${q}`
+            }
+        } else {
+             // Fallback hardcoded URLs if DB is empty or fails
+             switch (engine) {
+                case 'google':
+                    url = `https://www.google.com/search?q=${q}`
+                    break
+                case 'github':
+                    url = `https://github.com/search?q=${q}&type=code`
+                    break
+                case 'shodan':
+                    url = `https://www.shodan.io/search?query=${q}`
+                    break
+                case 'fofa':
+                    url = `https://en.fofa.info/result?qbase64=${qBase64}`
+                    break
+                case 'censys':
+                    url = `https://search.censys.io/search?resource=hosts&q=${q}`
+                    break
+                 case 'hunter':
+                    url = `https://hunter.how/search?q=${qBase64}`
+                    break
+                case 'bing':
+                    url = `https://www.bing.com/search?q=${q}`
+                    break
+            }
         }
-        window.open(url, '_blank')
+       
+        if (url) window.open(url, '_blank')
     }
 
   return (
