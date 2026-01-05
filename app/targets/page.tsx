@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
 import { Plus, Globe, Link as LinkIcon, Loader2, Trash2 } from "lucide-react"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { HackerLoader } from "@/components/ui/hacker-loader"
 
 export default function TargetsPage() {
     const { activeTarget } = useTarget()
@@ -109,7 +110,7 @@ export default function TargetsPage() {
             </div>
 
             {isLoading ? (
-                 <div className="flex justify-center p-8"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>
+                 <div className="flex justify-center p-8"><HackerLoader text="FETCHING_DATA" /></div>
             ) : domains.length === 0 ? (
                 <div className="text-center py-20 text-muted-foreground">
                     No domains added yet. Start by adding a domain.
@@ -214,8 +215,7 @@ function AddDomainDialog({ onAdd }: { onAdd: (input: string) => Promise<void> })
                     />
                     <DialogFooter>
                         <Button type="submit" disabled={loading}>
-                             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                             Add Domains
+                             {loading ? <HackerLoader text="ADDING..." className="mr-2" /> : "Add Domains"}
                         </Button>
                     </DialogFooter>
                 </form>
@@ -260,8 +260,7 @@ function AddEndpointDialog({ onAdd }: { onAdd: (input: string) => Promise<void> 
                     />
                     <DialogFooter>
                         <Button type="submit" disabled={loading}>
-                            {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                            Add Endpoints
+                            {loading ? <HackerLoader text="ADDING..." className="mr-2" /> : "Add Endpoints"}
                         </Button>
                     </DialogFooter>
                 </form>
