@@ -40,12 +40,6 @@ export function Sidebar({ className }: SidebarProps) {
       experimental: true,
     },
     {
-      name: "Target Scope",
-      href: "/targets",
-      icon: Target,
-      active: pathname?.startsWith("/targets"),
-    },
-    {
       name: "Recon Workflow",
       href: "/recon",
       icon: Scan,
@@ -62,6 +56,12 @@ export function Sidebar({ className }: SidebarProps) {
       href: "/tools",
       icon: Hammer,
       active: pathname?.startsWith("/tools"),
+    },
+    {
+      name: "Target Scope",
+      href: "/targets",
+      icon: Target,
+      active: pathname?.startsWith("/targets"),
     },
     {
       name: "Pentest Notes",
