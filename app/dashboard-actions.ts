@@ -93,7 +93,6 @@ export async function getDashboardStats(): Promise<DashboardStats> {
         assetsCount,
         statusDistribution,
         topTechnologies,
-        topTechnologies,
         recentTargets: targets.slice(0, 5),
         highValueCount: highValueCount || 0,
         apiCount: apiCount || 0
