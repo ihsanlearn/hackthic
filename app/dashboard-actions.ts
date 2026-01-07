@@ -28,6 +28,9 @@ export async function getDashboardStats(): Promise<DashboardStats> {
     const { data: domains, error: domainsError } = await supabase
         .from('domains')
         .select('status_code, technologies')
+
+    if (domainsError) throw new Error(domainsError.message)
+    if (!domains) throw new Error("Domains data is null")
     
     // 3. Get High Value & API Endpoint Counts
     // We can use a single query to fetch relevant flags or two count queries.
