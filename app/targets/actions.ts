@@ -118,21 +118,53 @@ export async function createDomains(targetId: string, urls: string[]) {
     return data as Domain[]
 }
 
+import { z } from "zod"
+
+const HttpxResultSchema = z.object({
+    url: z.string().optional(),
+    input: z.string().optional(),
+    title: z.string().optional(),
+    status_code: z.number().optional(),
+    webserver: z.string().optional(),
+    tech: z.array(z.string()).optional(),
+    host_ip: z.string().optional(),
+    ip: z.string().optional(),
+    host: z.string().optional(),
+    cname: z.array(z.string()).optional(),
+    cdn_name: z.string().optional(),
+    cdn: z.union([z.string(), z.boolean()]).optional(), // cdn can be boolean or string in some contexts
+}).refine(data => data.url || data.input, {
+    message: "Either url or input is required"
+})
+
+const HttpxImportSchema = z.array(HttpxResultSchema)
+
 export async function importHttpxResults(targetId: string, results: any[]) {
     const supabase = await createClient()
     
-    const records = results.map(r => {
-        const scoreData = calculateDomainScore(r);
+    // 1. Validate Input
+    const parseResult = HttpxImportSchema.safeParse(results)
+    
+    if (!parseResult.success) {
+        console.error("Validation failed:", parseResult.error)
+        throw new Error("Invalid Httpx data format. Please check the file.")
+    }
+    
+    const validResults = parseResult.data
+
+    const records = validResults.map(r => {
+        // Safe to access properties now
+        const scoreData = calculateDomainScore(r as any); // Cast to any for scoring lib compatibility if needed, or update scoring lib type
         return {
             target_id: targetId,
-            url: r.url || r.input, // fallback to input if url missing
+            url: (r.url || r.input)!, // Guaranteed by refine
             title: r.title,
             status_code: r.status_code,
             webserver: r.webserver,
-            technologies: r.tech, // Map 'tech' from httpx to 'technologies' in db
-            ip: r.host_ip || r.ip || r.host, // Try multiple fields for IP
+            technologies: r.tech, 
+            ip: r.host_ip || r.ip || r.host, 
             cname: r.cname,
-            cdn: r.cdn_name || (r.cdn ? "Unknown CDN" : null), // Map cdn_name
+            cdn: r.cdn_name || (r.cdn ? "Unknown CDN" : null), 
             priority_score: scoreData.score,
             in_scope: true
         }

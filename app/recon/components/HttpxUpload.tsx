@@ -18,6 +18,8 @@ export function HttpxUpload({ targetId, onUploadComplete }: HttpxUploadProps) {
     const [error, setError] = useState<string | null>(null)
     const [stats, setStats] = useState<{ total: number, valid: number } | null>(null)
 
+    const [progress, setProgress] = useState<{ current: number, total: number } | null>(null)
+
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
         if (!file) return
@@ -25,6 +27,7 @@ export function HttpxUpload({ targetId, onUploadComplete }: HttpxUploadProps) {
         setIsLoading(true)
         setError(null)
         setStats(null)
+        setProgress(null)
 
         try {
             const text = await file.text()
@@ -46,7 +49,18 @@ export function HttpxUpload({ targetId, onUploadComplete }: HttpxUploadProps) {
 
             console.log(`Parsed ${results.length} valid items from ${lines.length} lines`)
             
-            await importHttpxResults(targetId, results)
+            // BATCHING LOGIC
+            const BATCH_SIZE = 500
+            const totalItems = results.length
+            let processedItems = 0
+
+            for (let i = 0; i < totalItems; i += BATCH_SIZE) {
+                const chunk = results.slice(i, i + BATCH_SIZE)
+                await importHttpxResults(targetId, chunk)
+                
+                processedItems += chunk.length
+                setProgress({ current: processedItems, total: totalItems })
+            }
             
             setStats({ total: lines.length, valid: results.length })
             onUploadComplete()
@@ -57,6 +71,7 @@ export function HttpxUpload({ targetId, onUploadComplete }: HttpxUploadProps) {
             setError(err instanceof Error ? err.message : "Failed to process file")
         } finally {
             setIsLoading(false)
+            setProgress(null)
         }
     }
 
@@ -80,8 +95,13 @@ export function HttpxUpload({ targetId, onUploadComplete }: HttpxUploadProps) {
                 <div className="flex flex-col items-center justify-center border-2 border-dashed rounded-lg p-10 space-y-4 hover:bg-muted/50 transition-colors">
                     {isLoading ? (
                         <div className="text-center space-y-2">
-                            <HackerLoader text="PARSING_DATA" />
-                            <p className="text-xs text-muted-foreground">Analyzing assets...</p>
+                            <HackerLoader text={progress ? "IMPORTING_BATCH" : "PARSING_DATA"} />
+                            <p className="text-xs text-muted-foreground">
+                                {progress 
+                                    ? `Imported ${progress.current} / ${progress.total} assets...` 
+                                    : "Analyzing assets..."
+                                }
+                            </p>
                         </div>
                     ) : stats ? (
                         <div className="text-center space-y-2 text-green-500">
