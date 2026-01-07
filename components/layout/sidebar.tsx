@@ -21,7 +21,8 @@ import {
   Settings,
   Search,
   FlaskConical,
-  ShieldAlert
+  ShieldAlert,
+  List
 } from "lucide-react"
 import { useState } from "react"
 
@@ -80,6 +81,12 @@ export function Sidebar({ className }: SidebarProps) {
       href: "/dorks",
       icon: Search,
       active: pathname?.startsWith("/dorks"),
+    },
+    {
+      name: "Wordlists",
+      href: "/wordlists",
+      icon: List,
+      active: pathname?.startsWith("/wordlists"),
     },
     {
       name: "Automations",

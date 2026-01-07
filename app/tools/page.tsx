@@ -1,9 +1,9 @@
-"use client"
-
-// import { Button } from "@/components/ui/button"
+import { getTools } from "./actions"
 import { ToolsList } from "./components/ToolsList"
 
-export default function ToolsPage() {
+export default async function ToolsPage() {
+  const categories = await getTools()
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -11,10 +11,9 @@ export default function ToolsPage() {
           <h1 className="text-3xl font-bold tracking-tight">Tools & Notes</h1>
           <p className="text-muted-foreground">Manage your tool arsenal and integration settings.</p>
         </div>
-        {/* <Button variant="outline">Import Tool</Button> */}
       </div>
 
-      <ToolsList />
+      <ToolsList categories={categories} />
     </div>
   )
 }

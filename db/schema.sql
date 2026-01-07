@@ -195,3 +195,74 @@ create index idx_domains_target_id on domains(target_id);
 create index idx_endpoints_domain_id on endpoints(domain_id);
 create index idx_payloads_type on payloads(payload_type_id);
 create index idx_dorks_engine on dorks(engine_id);
+
+create table tool_categories (
+  id uuid primary key default gen_random_uuid(),
+  name text not null unique
+);
+
+create table tools (
+  id uuid primary key default gen_random_uuid(),
+  category_id uuid references tool_categories(id) on delete cascade,
+  name text not null unique,
+  description text,
+  status text,
+  version text,
+  command text,
+  created_at timestamptz default now()
+);
+
+alter table tool_categories enable row level security;
+alter table tools enable row level security;
+
+-- tool_categories
+create policy "authenticated full access"
+on tool_categories
+for all
+using (auth.uid() is not null)
+with check (auth.uid() is not null);
+
+-- tools
+create policy "authenticated full access"
+on tools
+for all
+using (auth.uid() is not null)
+with check (auth.uid() is not null);
+
+create index idx_tools_category on tools(category_id);
+
+create table wordlist_categories (
+  id uuid primary key default gen_random_uuid(),
+  name text not null unique,
+  description text
+);
+
+create table wordlists (
+  id uuid primary key default gen_random_uuid(),
+  category_id uuid references wordlist_categories(id) on delete cascade,
+  name text not null,
+  path text not null,
+  description text,
+  line_count integer,
+  size text,
+  created_at timestamptz default now()
+);
+
+alter table wordlist_categories enable row level security;
+alter table wordlists enable row level security;
+
+-- wordlist_categories
+create policy "authenticated full access"
+on wordlist_categories
+for all
+using (auth.uid() is not null)
+with check (auth.uid() is not null);
+
+-- wordlists
+create policy "authenticated full access"
+on wordlists
+for all
+using (auth.uid() is not null)
+with check (auth.uid() is not null);
+
+create index idx_wordlists_category on wordlists(category_id);
