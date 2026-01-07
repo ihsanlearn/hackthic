@@ -16,21 +16,45 @@ export function calculateDomainScore(domain: any): ScoreResult {
     const technologies = domain.technologies || []; 
     const cdn = domain.cdn || domain.cdn_name;
     const cnames = domain.cname || [];
+    const techsLower = technologies.map((t: string) => t.toLowerCase());
+
+    // --- DEFINITIONS (Hoisted for Scope Access) ---
+    const authIntent = ['login', 'sign in', 'signin', 'auth', 'account', 'session'];
+    const adminIntent = ['admin', 'dashboard', 'panel', 'console', 'manage', 'config'];
+    // Negative signals
+    const boringTitles = ['blog', 'docs', 'documentation', 'help', 'support', 'faq', 'career', 'job'];
+
+    const frameworks = ['laravel', 'django', 'spring', 'rails', 'express', 'nextjs', 'nuxt', 'react', 'vue'];
+    const authCloud = ['auth', 'jwt', 'oauth', 'firebase', 'supabase', 'aws', 'gcp', 'azure', 'cognito'];
+    const apiTech = ['graphql', 'swagger', 'openapi', 'rest', 'api'];
+    const contentSignals = ['wordpress', 'ghost', 'blogger', 'medium', 'hugo', 'jekyll', 'wix', 'squarespace'];
+
 
     // --- 1. STATUS CODE (REFINED) ---
-    // 401/403 is the new 200. We want restricted areas.
     if (statusCode) {
         if (statusCode >= 200 && statusCode < 300) {
             score += 20; // Lowered from 30. Marketing sites are often 200.
-            // reasons.push('status_2xx');
-        } else if (statusCode === 401 || statusCode === 403) {
-            score += 30; // High value targets often protected.
-            // reasons.push(`status_${statusCode}`);
+        } else if (statusCode === 401) {
+            score += 30; // 401 is still high interest (Basic Auth / Explicit Deny)
+        } else if (statusCode === 403) {
+            // New 403 Logic requested by user
+            score += 10; // base curiosity
+
+            if (adminIntent.some(k => title.includes(k))) {
+                score += 10; // protected admin
+            }
+
+            if (techsLower.some((t: string) => frameworks.some(f => t.includes(f)))) {
+                score += 10; // app-level gate
+            }
+
+            if (techsLower.some((t: string) => t.includes('cloudflare'))) {
+                score -= 5; // likely generic block
+            }
         } else if (statusCode >= 300 && statusCode < 400) {
             score += 10;
         } else if (statusCode >= 500) {
             score += 20; // Unstable/Misconfig is interesting.
-            // reasons.push('status_5xx');
         }
 
         // Refinement 1: Penalty for 2xx with empty title (likely broken/default)
@@ -46,11 +70,6 @@ export function calculateDomainScore(domain: any): ScoreResult {
     }
 
     // --- 3. TITLE INTENT (SMARTER) ---
-    const authIntent = ['login', 'sign in', 'signin', 'auth', 'account', 'session'];
-    const adminIntent = ['admin', 'dashboard', 'panel', 'console', 'manage', 'config'];
-    // Negative signals
-    const boringTitles = ['blog', 'docs', 'documentation', 'help', 'support', 'faq', 'career', 'job'];
-
     let titleScore = 0;
 
     if (adminIntent.some(k => title.includes(k))) {
@@ -72,12 +91,6 @@ export function calculateDomainScore(domain: any): ScoreResult {
 
     // --- 4. TECHNOLOGY (ADDITIVE + CAPPED) ---
     // Instead of else-if, we add up points for modern stack signals, but cap the total tech contribution.
-    const frameworks = ['laravel', 'django', 'spring', 'rails', 'express', 'nextjs', 'nuxt', 'react', 'vue'];
-    const authCloud = ['auth', 'jwt', 'oauth', 'firebase', 'supabase', 'aws', 'gcp', 'azure', 'cognito'];
-    const apiTech = ['graphql', 'swagger', 'openapi', 'rest', 'api'];
-    const contentSignals = ['wordpress', 'ghost', 'blogger', 'medium', 'hugo', 'jekyll', 'wix', 'squarespace'];
-    
-    const techsLower = technologies.map((t: string) => t.toLowerCase());
     
     let techScore = 0;
 
