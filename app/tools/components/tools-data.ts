@@ -23,7 +23,7 @@ export const proxy: ToolItem[] = [
     version: "2.14.0",
     category: "Proxy",
     command: "./zap.sh -daemon"
-  },
+  },  
   {
     name: "Mitmproxy",
     description: "Interactive HTTPS proxy for debugging and testing HTTP traffic.",
@@ -113,7 +113,7 @@ export const recon: ToolItem[] = [
     status: "Ready",
     version: "v1.0.0",
     category: "Recon",
-    command: "katana -u https://target.com"
+    command: "katana -list live-hosts.txt -d 3 -jc -xhr -kf all -pc -fx -iqp -ef png,jpg,jpeg,gif,svg,css,woff,woff2,ttf,ico,map -c 10 -rl 100 -timeout 10 -jsonl -ob -or -o katana-live.json"
   },
   {
     name: "Hakrawler",

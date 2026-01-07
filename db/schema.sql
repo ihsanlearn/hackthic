@@ -18,7 +18,14 @@ create table target_platforms (
 create table domains (
   id uuid primary key default gen_random_uuid(),
   target_id uuid references targets(id) on delete cascade,
-  name text not null,
+  url text not null,
+  title text,
+  status_code integer,
+  webserver text,
+  technologies text[],
+  ip text,
+  cname text[],
+  cdn text,
   priority_score integer default 0,
   in_scope boolean default true
 );
@@ -26,7 +33,29 @@ create table domains (
 create table endpoints (
   id uuid primary key default gen_random_uuid(),
   domain_id uuid references domains(id) on delete cascade,
-  path text not null
+
+  path text not null,
+  method text default 'GET',
+
+  status_code integer,
+  source text,              -- link, script, xhr, form, robots
+  tag text,                 -- a, script, form, fetch
+
+  has_query boolean default false,
+  query_param_count integer default 0,
+
+  is_api boolean default false,
+  is_xhr boolean default false,
+  is_form boolean default false,
+
+  discovered_from text,     -- halaman asal
+  depth integer default 0,
+
+  confidence text, -- low | medium | high | null
+  needs_manual boolean default false,
+
+  created_at timestamp default now(),
+  unique(domain_id, path, method)
 );
 
 create table payload_types (

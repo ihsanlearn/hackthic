@@ -1,9 +1,30 @@
+"use client"
+
+import { useEffect, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Activity, Target, Shield, Bug, Search, FileText, Bot, Hammer } from "lucide-react"
+import { Activity, Target, Shield, Bug, Search, FileText, Bot, Zap, Globe, Server, Webhook, Radio } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { getDashboardStats, DashboardStats } from "@/app/dashboard-actions"
+import { HackerLoader } from "@/components/ui/hacker-loader"
+import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Cell } from "recharts"
+import { Badge } from "@/components/ui/badge"
 
 export default function Dashboard() {
+  const [stats, setStats] = useState<DashboardStats | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    getDashboardStats()
+      .then(setStats)
+      .catch(console.error)
+      .finally(() => setLoading(false))
+  }, [])
+
+  if (loading) {
+     return <div className="h-[50vh] flex items-center justify-center"><HackerLoader text="INITIALIZING_DASHBOARD" /></div>
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -17,42 +38,42 @@ export default function Dashboard() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Targets</CardTitle>
+            <CardTitle className="text-sm font-medium">Total Targets</CardTitle>
             <Target className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">12</div>
-            <p className="text-xs text-muted-foreground">+2 from last week</p>
+            <div className="text-2xl font-bold">{stats?.targetsCount || 0}</div>
+            <p className="text-xs text-muted-foreground">Active scopes</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Vulns Found</CardTitle>
-            <Bug className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Total Assets</CardTitle>
+            <Globe className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">4</div>
-            <p className="text-xs text-muted-foreground">+1 pending triage</p>
+            <div className="text-2xl font-bold">{stats?.assetsCount || 0}</div>
+            <p className="text-xs text-muted-foreground">Discovered Subdomains/URLs</p>
+          </CardContent>
+        </Card>
+         <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">High Value Signals</CardTitle>
+            <Radio className="h-4 w-4 text-red-500" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stats?.highValueCount || 0}</div>
+            <p className="text-xs text-muted-foreground">Requires Manual Review</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Workflows</CardTitle>
-            <Activity className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">API Surface</CardTitle>
+            <Webhook className="h-4 w-4 text-purple-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">8</div>
-            <p className="text-xs text-muted-foreground">Recent: Subdomain Enum</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Security Score</CardTitle>
-            <Shield className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">85%</div>
-            <p className="text-xs text-muted-foreground">Workflow efficiency</p>
+            <div className="text-2xl font-bold">{stats?.apiCount || 0}</div>
+            <p className="text-xs text-muted-foreground">Discovered Endpoints</p>
           </CardContent>
         </Card>
       </div>
@@ -65,10 +86,10 @@ export default function Dashboard() {
                 <span className="font-semibold">Start Recon</span>
             </Button>
           </Link>
-          <Link href="/notes" className="w-full">
+          <Link href="/targets" className="w-full">
             <Button variant="outline" className="w-full h-24 flex flex-col gap-2 hover:bg-primary/5 hover:border-primary/50 transition-all">
-                <FileText className="h-6 w-6 text-primary" />
-                <span className="font-semibold">Open Notes</span>
+                <Target className="h-6 w-6 text-primary" />
+                <span className="font-semibold">Manage Targets</span>
             </Button>
           </Link>
           <Link href="/payloads" className="w-full">
@@ -86,87 +107,85 @@ export default function Dashboard() {
        </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+        
+        {/* Status Code Distribution Chart */}
         <Card className="col-span-4">
           <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
+            <CardTitle>Asset Status Overview</CardTitle>
             <CardDescription>
-              Your bug hunting activities over the last 24 hours.
+              Distribution of HTTP status codes across all targets.
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-               {/* Activity Feed */}
-               <div className="flex items-center">
-                  <span className="relative flex h-2 w-2 mr-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-sky-500"></span>
-                  </span>
-                  <div className="ml-4 space-y-1">
-                    <p className="text-sm font-medium leading-none">Starting Nmap scan on target-alpha</p>
-                    <p className="text-sm text-muted-foreground">2 minutes ago</p>
-                  </div>
-               </div>
-               <div className="flex items-center">
-                   <div className="ml-4 space-y-1">
-                    <p className="text-sm font-medium leading-none">Found exposed .git directory</p>
-                    <p className="text-sm text-muted-foreground">1 hour ago</p>
-                  </div>
-               </div>
-               <div className="flex items-center">
-                   <div className="ml-4 space-y-1">
-                    <p className="text-sm font-medium leading-none">Completed recon workflow #23</p>
-                    <p className="text-sm text-muted-foreground">3 hours ago</p>
-                  </div>
-               </div>
-                <div className="flex items-center">
-                   <div className="ml-4 space-y-1">
-                    <p className="text-sm font-medium leading-none">Updated "XSS on Login" note</p>
-                    <p className="text-sm text-muted-foreground">5 hours ago</p>
-                  </div>
-               </div>
-            </div>
+          <CardContent className="pl-2">
+            {stats?.statusDistribution && stats.statusDistribution.length > 0 ? (
+                <div className="h-[240px] w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={stats.statusDistribution}>
+                            <XAxis 
+                                dataKey="status" 
+                                stroke="#888888" 
+                                fontSize={12} 
+                                tickLine={false} 
+                                axisLine={false} 
+                            />
+                            <YAxis 
+                                stroke="#888888" 
+                                fontSize={12} 
+                                tickLine={false} 
+                                axisLine={false} 
+                                tickFormatter={(value) => `${value}`} 
+                            />
+                            <Tooltip 
+                                contentStyle={{ backgroundColor: '#09090b', border: '1px solid #27272a' }}
+                                cursor={{fill: '#27272a', opacity: 0.4}}
+                            />
+                            <Bar dataKey="count" radius={[4, 4, 0, 0]}>
+                                {stats.statusDistribution.map((entry, index) => (
+                                    <Cell key={`cell-${index}`} fill={entry.fill} />
+                                ))}
+                            </Bar>
+                        </BarChart>
+                    </ResponsiveContainer>
+                </div>
+            ) : (
+                <div className="h-[240px] flex items-center justify-center text-muted-foreground border border-dashed rounded-lg">
+                    No asset data available.
+                </div>
+            )}
           </CardContent>
         </Card>
         
+        {/* Top Technologies List */}
         <Card className="col-span-3">
           <CardHeader>
-            <CardTitle>Pinned Tools</CardTitle>
+            <CardTitle>Top Technologies</CardTitle>
             <CardDescription>
-              Quick access to favorite tools
+              Most common tech stacks detected.
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="flex items-center justify-between p-2 border rounded-md hover:bg-muted cursor-pointer transition-colors">
-                <div className="flex items-center gap-3">
-                    <Hammer className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm font-medium">Burp Suite Pro</span>
-                </div>
-                <div className="flex items-center gap-2">
-                    <span className="text-green-500 text-xs">●</span>
-                </div>
-              </div>
-              <div className="flex items-center justify-between p-2 border rounded-md hover:bg-muted cursor-pointer transition-colors">
-                <div className="flex items-center gap-3">
-                    <Search className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm font-medium">Recon-ng</span>
-                </div>
-                 <div className="flex items-center gap-2">
-                    <span className="text-yellow-500 text-xs">●</span>
-                </div>
-              </div>
-              <div className="flex items-center justify-between p-2 border rounded-md hover:bg-muted cursor-pointer transition-colors">
-                <div className="flex items-center gap-3">
-                    <Bot className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm font-medium">Nuclei</span>
-                </div>
-                 <div className="flex items-center gap-2">
-                    <span className="text-green-500 text-xs">●</span>
-                </div>
-              </div>
+               {stats?.topTechnologies && stats.topTechnologies.length > 0 ? (
+                   stats.topTechnologies.map((tech, index) => (
+                       <div key={tech.name} className="flex items-center justify-between p-2 border rounded-md hover:bg-muted/50 transition-colors">
+                            <div className="flex items-center gap-3">
+                                <span className="font-mono text-muted-foreground w-4">{index + 1}</span>
+                                <div className="flex items-center gap-2">
+                                    <Server className="h-4 w-4 text-muted-foreground" />
+                                    <span className="text-sm font-medium">{tech.name}</span>
+                                </div>
+                            </div>
+                            <Badge variant="secondary">{tech.count}</Badge>
+                       </div>
+                   ))
+               ) : (
+                   <div className="text-sm text-muted-foreground p-4 text-center">
+                       No technology data found.
+                   </div>
+               )}
             </div>
              <Button variant="ghost" size="sm" className="w-full mt-4 text-muted-foreground" asChild>
-                <Link href="/tools">View All Tools</Link>
+                <Link href="/targets">View All Assets</Link>
             </Button>
           </CardContent>
         </Card>
