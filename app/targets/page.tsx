@@ -7,7 +7,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
-import { Plus, Globe, Link as LinkIcon, Loader2, Trash2, Server, Globe2 } from "lucide-react"
+import { Plus, Globe, Link as LinkIcon, Loader2, Trash2, Server, Globe2, Search } from "lucide-react"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { HackerLoader } from "@/components/ui/hacker-loader"
 import { Badge } from "@/components/ui/badge"
@@ -20,6 +20,7 @@ export default function TargetsPage() {
     const [endpoints, setEndpoints] = useState<Record<string, Endpoint[]>>({})
     const [isLoading, setIsLoading] = useState(false)
     const [statusFilter, setStatusFilter] = useState("ALL")
+    const [searchQuery, setSearchQuery] = useState("")
 
     useEffect(() => {
         if (activeTarget) {
@@ -110,6 +111,12 @@ export default function TargetsPage() {
     }
 
     const filteredDomains = domains.filter(d => {
+        const matchesSearch = searchQuery === "" || 
+            d.url.toLowerCase().includes(searchQuery.toLowerCase()) || 
+            (d.title && d.title.toLowerCase().includes(searchQuery.toLowerCase()))
+
+        if (!matchesSearch) return false
+
         if (statusFilter === "ALL") return true
         if (!d.status_code) return statusFilter === "OTHER"
         if (statusFilter === "2xx") return d.status_code >= 200 && d.status_code < 300
@@ -133,8 +140,19 @@ export default function TargetsPage() {
                 </div>
             </div>
 
-            {/* Status Filter Bar */}
-            <div className="flex items-center gap-2 pb-2">
+            {/* Search and Filters */}
+            <div className="flex flex-col gap-4">
+                <div className="relative">
+                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                    <Input
+                        placeholder="Search domains by URL or title..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="pl-9"
+                    />
+                </div>
+
+                <div className="flex items-center gap-2 pb-2">
                 <Button 
                     variant={statusFilter === "ALL" ? "default" : "outline"} 
                     size="sm" 
@@ -175,6 +193,7 @@ export default function TargetsPage() {
                 >
                     5xx
                 </Button>
+            </div>
             </div>
 
             {isLoading ? (
