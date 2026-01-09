@@ -1,9 +1,10 @@
 "use client"
 
+import { useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Copy, FileText } from "lucide-react"
+import { Copy, FileText, Check } from "lucide-react"
 import { Wordlist } from "../types"
 import { toast } from "sonner"
 
@@ -12,9 +13,13 @@ interface WordlistCardProps {
 }
 
 export function WordlistCard({ wordlist }: WordlistCardProps) {
+  const [isCopied, setIsCopied] = useState(false)
+
   const copyPath = () => {
     navigator.clipboard.writeText(wordlist.path)
+    setIsCopied(true)
     toast.success("Path copied to clipboard")
+    setTimeout(() => setIsCopied(false), 2000)
   }
 
   return (
@@ -45,7 +50,7 @@ export function WordlistCard({ wordlist }: WordlistCardProps) {
                 className="h-6 w-6 absolute right-1 top-1 opacity-0 group-hover:opacity-100 transition-opacity"
                 onClick={copyPath}
             >
-                <Copy className="h-3 w-3" />
+                {isCopied ? <Check className="h-3 w-3 text-green-500" /> : <Copy className="h-3 w-3" />}
             </Button>
         </div>
 

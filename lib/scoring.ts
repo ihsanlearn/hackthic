@@ -54,7 +54,7 @@ export function calculateDomainScore(domain: any): ScoreResult {
         } else if (statusCode >= 300 && statusCode < 400) {
             score += 10;
         } else if (statusCode >= 500) {
-            score += 20; // Unstable/Misconfig is interesting.
+            score -= 10; // Unstable/Miisconfig (often just broken) is less interesting.
         }
 
         // Refinement 1: Penalty for 2xx with empty title (likely broken/default)
