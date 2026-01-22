@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { signOut } from '@/app/auth/actions';
+import { signOut } from '@/app/(main)/auth/actions';
 import { User } from '@supabase/supabase-js';
 import Link from 'next/link';
 import { LogOut, User as UserIcon } from 'lucide-react';

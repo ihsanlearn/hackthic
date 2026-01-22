@@ -11,12 +11,11 @@ interface DorkCardProps {
     engineUrl?: string
 }
 
-import { useVisited } from "../../visited-context"
+import { useVisited } from "@/app/visited-context"
 
 export function DorkCard({ item, targetDomain, engine, engineUrl }: DorkCardProps) {
     const { visited, markVisited } = useVisited()
 
-    // Helper to format query with target
     const getFormattedQuery = () => {
         if (!targetDomain) return item.query
 

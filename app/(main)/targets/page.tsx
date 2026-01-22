@@ -2,17 +2,18 @@
 
 import { useState, useEffect } from "react"
 import { useTarget } from "@/components/providers/target-provider"
-import { getDomains, getEndpoints, createDomains, createEndpoints, deleteDomain, deleteEndpoint, Domain, Endpoint } from "@/app/targets/actions"
+import { getDomains, getEndpoints, createDomains, createEndpoints, deleteDomain, deleteEndpoint, Domain, Endpoint } from "@/app/(main)/targets/actions"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
-import { Plus, Globe, Link as LinkIcon, Loader2, Trash2, Server, Globe2, Search } from "lucide-react"
+import { Plus, Globe, Link as LinkIcon, Loader2, Trash2, Server, Globe2, Search, Copy, Check } from "lucide-react"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { HackerLoader } from "@/components/ui/hacker-loader"
 import { Badge } from "@/components/ui/badge"
-import { HttpxUpload } from "@/app/recon/components/HttpxUpload"
-import { KatanaUpload } from "@/app/recon/components/KatanaUpload"
+import { HttpxUpload } from "@/app/(main)/recon/components/HttpxUpload"
+import { KatanaUpload } from "@/app/(main)/recon/components/KatanaUpload"
+import { toast } from "sonner"
 
 export default function TargetsPage() {
     const { activeTarget } = useTarget()
@@ -259,6 +260,19 @@ export default function TargetsPage() {
                                     <div className="flex-1" />
                                     
                                     {domain.ip && <span className="text-xs font-mono text-muted-foreground mr-4 hidden md:inline-block">{domain.ip}</span>}
+
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity mr-1"
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            navigator.clipboard.writeText(domain.url)
+                                            toast.success("Domain URL copied to clipboard")
+                                        }}
+                                    >
+                                        <Copy className="h-4 w-4" />
+                                    </Button>
 
                                     <Button 
                                         variant="ghost" 

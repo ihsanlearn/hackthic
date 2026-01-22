@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { createTarget } from "@/app/targets/actions"
+import { createTarget } from "@/app/(main)/targets/actions"
 import { useTarget } from "@/components/providers/target-provider"
 
 interface CreateTargetModalProps {

@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import { JetBrains_Mono, IBM_Plex_Sans, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import { AppShell } from "@/components/layout/app-shell";
+
 import { VisitedProvider } from "./visited-context";
 import { TargetProvider } from "@/components/providers/target-provider";
 import { JsonLd } from "@/components/json-ld";
+import { Toaster } from "sonner";
 
 const jetbrainsMono = JetBrains_Mono({ 
   subsets: ["latin"],
@@ -95,9 +96,10 @@ export default function RootLayout({
         >
           <VisitedProvider>
              <TargetProvider>
-                <AppShell>{children}</AppShell>
+                {children}
              </TargetProvider>
           </VisitedProvider>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

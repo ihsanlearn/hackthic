@@ -36,9 +36,9 @@ import {
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
-import { proxy, recon, scanning, fuzzing, exploitation, osint } from "@/app/tools/components/tools-data"
-import { getDorkEngines } from "@/app/dorks/actions"
-import { getPayloadCategories } from "@/app/payloads/actions"
+import { proxy, recon, scanning, fuzzing, exploitation, osint } from "@/app/(main)/tools/components/tools-data"
+import { getDorkEngines } from "@/app/(main)/dorks/actions"
+import { getPayloadCategories } from "@/app/(main)/payloads/actions"
 
 export function GlobalSearch() {
   const [open, setOpen] = React.useState(false)

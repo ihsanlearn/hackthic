@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { FileCode, Loader2, CheckCircle2, AlertCircle } from "lucide-react"
-import { importKatanaResults } from "@/app/targets/actions"
+import { importKatanaResults } from "@/app/(main)/targets/actions"
 
 interface KatanaUploadProps {
     targetId: string

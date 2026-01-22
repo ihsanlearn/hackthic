@@ -1,7 +1,7 @@
 "use client"
 
 import React, { createContext, useContext, useEffect, useState } from "react"
-import { Target, getTargets } from "@/app/targets/actions"
+import { Target, getTargets } from "@/app/(main)/targets/actions"
 
 interface TargetContextType {
     activeTarget: Target | null

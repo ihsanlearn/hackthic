@@ -5,7 +5,6 @@ import { useState, useEffect } from "react"
 export function useLocalStorage<T>(key: string, initialValue: T) {
   const [storedValue, setStoredValue] = useState<T>(initialValue)
 
-  // Initialize state from local storage on mount
   useEffect(() => {
     try {
       const item = window.localStorage.getItem(key)

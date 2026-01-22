@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Activity, Target, Shield, Bug, Search, FileText, Bot, Zap, Globe, Server, Webhook, Radio } from "lucide-react"
+import { Target, Search, FileText, Bot, Globe, Server, Webhook, Radio } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { getDashboardStats, DashboardStats } from "@/app/dashboard-actions"
+import { getDashboardStats, DashboardStats } from "@/app/(main)/dashboard-actions"
 import { HackerLoader } from "@/components/ui/hacker-loader"
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Cell } from "recharts"
 import { Badge } from "@/components/ui/badge"

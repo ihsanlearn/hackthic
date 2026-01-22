@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { HackerLoader } from "@/components/ui/hacker-loader"
 import { Upload, FileJson, AlertCircle } from "lucide-react"
-import { importHttpxResults } from "@/app/targets/actions"
+import { importHttpxResults } from "@/app/(main)/targets/actions"
 
 interface HttpxUploadProps {
     targetId: string
