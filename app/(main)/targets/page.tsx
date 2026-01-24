@@ -7,7 +7,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
-import { Plus, Globe, Link as LinkIcon, Loader2, Trash2, Server, Globe2, Search, Copy, Check } from "lucide-react"
+import { Plus, Globe, Link as LinkIcon, Loader2, Trash2, Server, Globe2, Search, Copy, Check, Download } from "lucide-react"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { HackerLoader } from "@/components/ui/hacker-loader"
 import { Badge } from "@/components/ui/badge"
@@ -100,6 +100,29 @@ export default function TargetsPage() {
         }
     }
 
+    const handleDownloadIPs = () => {
+        const ips = domains
+            .map(d => d.ip)
+            .filter(Boolean)
+            .join('\n');
+
+        if (!ips) {
+            toast.error("No IPs found to download");
+            return;
+        }
+
+        const blob = new Blob([ips], { type: 'text/plain' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'ip.txt';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        toast.success("IP list downloaded");
+    }
+
     if (!activeTarget) {
         return (
             <div className="flex h-[400px] w-full items-center justify-center rounded-lg border border-dashed text-muted-foreground">
@@ -135,6 +158,10 @@ export default function TargetsPage() {
                     <p className="text-muted-foreground">Manage domains and endpoints for this target.</p>
                 </div>
                 <div className="flex items-center gap-2">
+                    <Button variant="outline" size="sm" onClick={handleDownloadIPs} title="Download IPs">
+                        <Download className="h-4 w-4 mr-2" />
+                        IPs
+                    </Button>
                     <HttpxUpload targetId={activeTarget.id} onUploadComplete={handleUploadComplete} />
                     <KatanaUpload targetId={activeTarget.id} onUploadComplete={handleUploadComplete} />
                     <AddDomainDialog onAdd={handleAddDomains} />
