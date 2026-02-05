@@ -81,3 +81,5 @@ This project maintains a strict protocol for contributions and usage.
 <div align="center">
   <sub>Authorized Operatives Only • Secure Terminal Access • v2.4.0</sub>
 </div>
+
+---
